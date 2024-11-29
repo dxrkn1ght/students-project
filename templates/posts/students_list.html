@@ -1,0 +1,261 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student List</title>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #f0f4f8, #e4e9f2);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            padding: 30px;
+            background-color: #fff;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        h1, h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 2.5em;
+        }
+
+        .form-container {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        label {
+            font-weight: bold;
+            color: #333;
+            font-size: 1.1em;
+            transition: 0.3s ease;
+            display: block;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            margin-top: 10px;
+            font-size: 1em;
+            background-color: #f8f8f8;
+            box-sizing: border-box;
+            transition: border 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        input:focus {
+            border: 1px solid #007bff;
+            box-shadow: 0 0 10px rgba(0, 123, 255, 0.3);
+            outline: none;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 12px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1.2em;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .btn:hover {
+            background-color: #0056b3;
+            transform: scale(1.05);
+        }
+
+        .table-container {
+            margin-top: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            transition: 0.3s ease;
+        }
+
+        table th, table td {
+            padding: 15px;
+            text-align: left;
+            font-size: 1.1em;
+            border: 1px solid #ddd;
+        }
+
+        table th {
+            background-color: #007bff;
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        table tr:hover {
+            background-color: #f1f1f1;
+            transform: scale(1.02);
+            transition: transform 0.3s ease;
+        }
+
+        .action-btn {
+            padding: 8px 15px;
+            margin: 0 5px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            font-size: 1em;
+            transition: transform 0.2s ease, background-color 0.3s ease;
+        }
+
+        .edit-btn {
+            background-color: #ffc107;
+            color: #fff;
+        }
+
+        .delete-btn {
+            background-color: #dc3545;
+            color: #fff;
+        }
+
+        .edit-btn:hover {
+            background-color: #e0a800;
+            transform: scale(1.1);
+        }
+
+        .delete-btn:hover {
+            background-color: #c82333;
+            transform: scale(1.1);
+        }
+
+Комрон, [29.11.2024 20:16]
+
+
+        .no-records {
+            text-align: center;
+            font-size: 1.2em;
+            color: #777;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Student List</h1>
+        <div class="form-container">
+            <h2>Add New Student</h2>
+            <form id="studentForm">
+                <div class="form-group">
+                    <label for="firstName">First Name:</label>
+                    <input type="text" id="firstName" name="firstName" required>
+                </div>
+                <div class="form-group">
+                    <label for="lastName">Last Name:</label>
+                    <input type="text" id="lastName" name="lastName" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="age">Age:</label>
+                    <input type="number" id="age" name="age" min="1" required>
+                </div>
+                <button type="submit" class="btn">Add Student</button>
+            </form>
+        </div>
+        <div class="table-container">
+            <h2>List of Students</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Email</th>
+                        <th>Age</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="studentList">
+                    <tr class="no-records">
+                        <td colspan="5">No records to display.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        const form = document.getElementById("studentForm");
+        const studentList = document.getElementById("studentList");
+
+        form.addEventListener("submit", function(event) {
+            event.preventDefault();
+
+            const firstName = document.getElementById("firstName").value;
+            const lastName = document.getElementById("lastName").value;
+            const email = document.getElementById("email").value;
+            const age = document.getElementById("age").value;
+
+            const row = document.createElement("tr");
+            row.innerHTML = `
+                <td>${firstName}</td>
+                <td>${lastName}</td>
+                <td>${email}</td>
+                <td>${age}</td>
+                <td>
+                    <button class="action-btn edit-btn" onclick="editStudent(this)">Edit</button>
+                    <button class="action-btn delete-btn" onclick="deleteStudent(this)">Delete</button>
+                </td>
+            `;
+
+            studentList.querySelector('.no-records')?.remove();
+            studentList.appendChild(row);
+
+            form.reset();
+        });
+
+        function deleteStudent(button) {
+            const row = button.closest('tr');
+            row.remove();
+        }
+
+        function editStudent(button) {
+            const row = button.closest('tr');
+            const cells = row.querySelectorAll("td");
+
+            document.getElementById("firstName").value = cells[0].textContent;
+            document.getElementById("lastName").value = cells[1].textContent;
+            document.getElementById("email").value = cells[2].textContent;
+            document.getElementById("age").value = cells[3].textContent;
+
+            row.remove();
+        }
+    </script>
+</body>
+</html>
